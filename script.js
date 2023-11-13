@@ -294,11 +294,30 @@ userCityInput.addEventListener("submit", (event) => {
             fetch("https://api.open-meteo.com/v1/forecast?latitude="+city.results[0].latitude+"&longitude="+city.results[0].longitude+"&daily=weather_code,temperature_2m_max,temperature_2m_min")
                 .then(response => response.json()
                 .then(weather => {
-                    // for (let i = 0; i < 6; index++) {
+                    console.log(weather.daily);
+                    for (let i = 0; i <= 6; i++) {
+                        const article = document.createElement("article")
+                        const date = document.createElement("p")
+                        const image = document.createElement("img")
+                        const weatherName = document.createElement("p")
+                        const maxTemp = document.createElement("p")
+                        const minTemp = document.createElement("p")
+                        date.textContent = weather.daily.time[i]
+                        date.className = "date"
+                        image.src = WMOCodes[weather.daily.weather_code[i]].day.image
+                        weatherName.textContent = WMOCodes[weather.daily.weather_code[i]].day.description
+                        weatherName.className = "weather-name"
+                        maxTemp.innerHTML = "max<br>" + weather.daily.temperature_2m_max[i] + "°C"
+                        minTemp.innerHTML = "min<br>" + weather.daily.temperature_2m_min[i] + "°C"
+                        article.append(date)
+                        article.append(image)
+                        article.append(weatherName)
+                        article.append(maxTemp)
+                        article.append(minTemp)
+                        document.body.children[1].children[1].append(article)
+                        console.log(WMOCodes[weather.daily.weather_code[i]].day.image)
                         
-                        
-                    // }
-                    console.log(weather)
+                    }
                 }))
         })
 })
