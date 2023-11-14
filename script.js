@@ -311,7 +311,6 @@ async function startWeatherApp(){
 		const maxTemp = document.createElement("p")
 		const minTemp = document.createElement("p")
 		const day = new Date(weather.daily.time[i])
-		console.log(weather.daily.time[i]);
 		date.textContent = daysOfTheWeek[day.getDay()]
 		date.className = "date"
 		image.src = WMOCodes[weather.daily.weather_code[i]].day.image
