@@ -19,6 +19,8 @@ body{
         }
     }
     main{
+        width: 80%;
+        margin: auto;
         form{
             margin-top: 20px;
             text-align: center;
@@ -26,7 +28,7 @@ body{
                 display: inline;
                 position: absolute;
                 margin: 6px;
-                margin-left: 8px;
+                margin-left: 9px;
             }
             label::selection{
                 content: none;
@@ -54,6 +56,14 @@ body{
                 width: 100%;
                 margin: 25px;
                 font-size: 50px;
+            }
+            #today{
+                width: 100%;
+                display: block;
+                img{
+                    height: 150px;
+                    width: 150px;
+                }
             }
             article{
                 border-radius: 10px;

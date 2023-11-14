@@ -292,8 +292,9 @@ async function getGeoData(inputData){
 }
 
 async function getWeatherData(longitude, latitude){
-	const response = await fetch("https://api.open-meteo.com/v1/forecast?latitude="+latitude+"&longitude="+longitude+"&daily=weather_code,temperature_2m_max,temperature_2m_min")
+	const response = await fetch("https://api.open-meteo.com/v1/forecast?latitude="+latitude+"&longitude="+longitude+"&current=temperature_2m&hourly=temperature_2m,rain&daily=weather_code,temperature_2m_max,temperature_2m_min,rain_sum")
 	const weatherData = await response.json()
+	console.log(weatherData);
 
 	return weatherData
 }
@@ -305,13 +306,17 @@ async function startWeatherApp(){
 
 	for (let i = 0; i <= 6; i++) {
 		const article = document.createElement("article")
-		const date = document.createElement("p")
+		const date = document.createElement("h4")
 		const image = document.createElement("img")
 		const weatherName = document.createElement("p")
 		const maxTemp = document.createElement("p")
 		const minTemp = document.createElement("p")
-		const day = new Date(weather.daily.time[i])
-		date.textContent = daysOfTheWeek[day.getDay()]
+		if (i===0) {
+			date.textContent = "Today"
+		}else{
+			const day = new Date(weather.daily.time[i])
+			date.textContent = daysOfTheWeek[day.getDay()]
+		}
 		date.className = "date"
 		image.src = WMOCodes[weather.daily.weather_code[i]].day.image
 		weatherName.textContent = WMOCodes[weather.daily.weather_code[i]].day.description
@@ -319,11 +324,7 @@ async function startWeatherApp(){
 		maxTemp.className = minTemp.className = "temperature"
 		maxTemp.innerHTML = "max<br>" + weather.daily.temperature_2m_max[i] + "°C"
 		minTemp.innerHTML = "min<br>" + weather.daily.temperature_2m_min[i] + "°C"
-		article.append(date)
-		article.append(image)
-		article.append(weatherName)
-		article.append(maxTemp)
-		article.append(minTemp)
+		article.append(date, image, weatherName, maxTemp, minTemp)
 		document.body.children[1].children[1].append(article)
 	}
 
