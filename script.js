@@ -342,12 +342,23 @@ async function displayCityName(){
     document.body.children[1].children[1].append(cityName)
 }
 
+async function tempNow(){
+	const userInput = document.getElementById("user-city").value
+	const geo = await getGeoData(userInput)
+	const weather = await getWeatherData(geo.longitude, geo.latitude)
+
+	const currentTemp = document.createElement("section")
+	currentTemp.innerHTML = "<p>Current temperature in "+geo.name+":</p><br><h3>"+weather.current.temperature_2m + weather.current_units.temperature_2m+"</h3>"
+	document.body.children[1].children[1].append(currentTemp)
+}
+
 const userCityInput = document.getElementById("user-city-input")
 
 userCityInput.addEventListener("submit", (event) => {
 	event.preventDefault()
 	document.body.children[1].children[1].innerHTML = ""
 	displayCityName()
+	tempNow()
 	startWeatherApp()
 })
 
