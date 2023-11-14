@@ -1,3 +1,4 @@
+
 const WMOCodes = {
 	"0":{
 		"day":{
@@ -303,7 +304,7 @@ async function startWeatherApp(){
 	const userInput = document.getElementById("user-city").value
 	const geo = await getGeoData(userInput)
 	const weather = await getWeatherData(geo.longitude, geo.latitude)
-
+	let arrayList = 0
 	for (let i = 0; i <= 6; i++) {
 		const article = document.createElement("article")
 		const date = document.createElement("h4")
@@ -311,6 +312,9 @@ async function startWeatherApp(){
 		const weatherName = document.createElement("p")
 		const maxTemp = document.createElement("p")
 		const minTemp = document.createElement("p")
+		for (let j = 0; j <= 23 ; j++) {
+			arrayList =+ j
+		}
 		if (i===0) {
 			date.textContent = "Today"
 		}else{
