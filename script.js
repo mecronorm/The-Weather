@@ -317,6 +317,7 @@ async function startWeatherApp(){
 		image.src = WMOCodes[weather.daily.weather_code[i]].day.image
 		weatherName.textContent = WMOCodes[weather.daily.weather_code[i]].day.description
 		weatherName.className = "weather-name"
+		maxTemp.className = minTemp.className = "temperature"
 		maxTemp.innerHTML = "max<br>" + weather.daily.temperature_2m_max[i] + "°C"
 		minTemp.innerHTML = "min<br>" + weather.daily.temperature_2m_min[i] + "°C"
 		article.append(date)
