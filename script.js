@@ -280,6 +280,9 @@ const WMOCodes = {
 		}
 	}
 }
+
+const daysOfTheWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
 async function getGeoData(inputData){
 	const response = await fetch("https://geocoding-api.open-meteo.com/v1/search?name="+inputData+"&count=10&language=en&format=json")
 	const city = await response.json()
@@ -307,7 +310,9 @@ async function startWeatherApp(){
 		const weatherName = document.createElement("p")
 		const maxTemp = document.createElement("p")
 		const minTemp = document.createElement("p")
-		date.textContent = weather.daily.time[i]
+		const day = new Date(weather.daily.time[i])
+		console.log(weather.daily.time[i]);
+		date.textContent = daysOfTheWeek[day.getDay()]
 		date.className = "date"
 		image.src = WMOCodes[weather.daily.weather_code[i]].day.image
 		weatherName.textContent = WMOCodes[weather.daily.weather_code[i]].day.description
@@ -332,11 +337,19 @@ async function displayCityName(){
     document.body.children[1].children[1].append(cityName)
 }
 
-
 const userCityInput = document.getElementById("user-city-input")
+
 userCityInput.addEventListener("submit", (event) => {
 	event.preventDefault()
 	document.body.children[1].children[1].innerHTML = ""
 	displayCityName()
 	startWeatherApp()
+})
+
+userCityInput.addEventListener("keyup", (event)=>{
+	if (event.target.value) {
+		document.querySelector("label").style.display = "none"
+	} else{
+		document.querySelector("label").style.display = "inline"
+	}
 })

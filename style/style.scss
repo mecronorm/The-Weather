@@ -12,16 +12,36 @@ body{
         text-align: center;
         h1{
             font-size: 75px;
+            margin: 10px;
+        }
+        p{
+            font-size: 20px;
         }
     }
     main{
         form{
-            justify-content: center;
+            margin-top: 20px;
+            text-align: center;
             label{
-                display: block;
+                display: inline;
+                position: absolute;
+                margin: 6px;
+                margin-left: 8px;
             }
-            label:after{
-                content: ": ";
+            label::selection{
+                content: none;
+            }
+            label:hover{
+                cursor: text;
+            }
+            input{
+                box-sizing: border-box;
+                padding: 5px;
+                border-radius: 20px;
+            }
+            button{
+                padding: 5px 10px;
+                border-radius: 20px;
             }
         }
         section{
@@ -55,5 +75,12 @@ body{
     body{
         height: auto;
         background-position: center;
+        main{
+            form{
+                button{
+                    display: none;
+                }
+            }
+        }
     }
 }
