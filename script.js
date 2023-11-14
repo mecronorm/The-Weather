@@ -280,44 +280,63 @@ const WMOCodes = {
 		}
 	}
 }
+async function getGeoData(inputData){
+	const response = await fetch("https://geocoding-api.open-meteo.com/v1/search?name="+inputData+"&count=10&language=en&format=json")
+	const city = await response.json()
+
+	return city.results[0]
+
+}
+
+async function getWeatherData(longitude, latitude){
+	const response = await fetch("https://api.open-meteo.com/v1/forecast?latitude="+latitude+"&longitude="+longitude+"&daily=weather_code,temperature_2m_max,temperature_2m_min")
+	const weatherData = await response.json()
+
+	return weatherData
+}
+
+async function startWeatherApp(){
+	const userInput = document.getElementById("user-city").value
+	const geo = await getGeoData(userInput)
+	const weather = await getWeatherData(geo.longitude, geo.latitude)
+
+	for (let i = 0; i <= 6; i++) {
+		const article = document.createElement("article")
+		const date = document.createElement("p")
+		const image = document.createElement("img")
+		const weatherName = document.createElement("p")
+		const maxTemp = document.createElement("p")
+		const minTemp = document.createElement("p")
+		date.textContent = weather.daily.time[i]
+		date.className = "date"
+		image.src = WMOCodes[weather.daily.weather_code[i]].day.image
+		weatherName.textContent = WMOCodes[weather.daily.weather_code[i]].day.description
+		weatherName.className = "weather-name"
+		maxTemp.innerHTML = "max<br>" + weather.daily.temperature_2m_max[i] + "°C"
+		minTemp.innerHTML = "min<br>" + weather.daily.temperature_2m_min[i] + "°C"
+		article.append(date)
+		article.append(image)
+		article.append(weatherName)
+		article.append(maxTemp)
+		article.append(minTemp)
+		document.body.children[1].children[1].append(article)
+	}
+
+}
+
+async function displayCityName(){
+	const userInput = document.getElementById("user-city").value
+	const geo = await getGeoData(userInput)
+	const cityName = document.createElement("h2")
+    cityName.textContent = geo.name
+    document.body.children[1].children[1].append(cityName)
+}
+
+
 const userCityInput = document.getElementById("user-city-input")
 userCityInput.addEventListener("submit", (event) => {
-    event.preventDefault()
-    fetch("https://geocoding-api.open-meteo.com/v1/search?name="+event.target[0].value+"&count=10&language=en&format=json")
-        .then(response => response.json())
-        .then(city => {
-            const cityName = document.createElement("h2")
-            cityName.textContent = city.results[0].name
-            document.body.children[1].children[1].innerHTML = ""
-            document.body.children[1].children[1].append(cityName)
-            console.log(city.results[0].name)
-            fetch("https://api.open-meteo.com/v1/forecast?latitude="+city.results[0].latitude+"&longitude="+city.results[0].longitude+"&daily=weather_code,temperature_2m_max,temperature_2m_min")
-                .then(response => response.json()
-                .then(weather => {
-                    console.log(weather.daily);
-                    for (let i = 0; i <= 6; i++) {
-                        const article = document.createElement("article")
-                        const date = document.createElement("p")
-                        const image = document.createElement("img")
-                        const weatherName = document.createElement("p")
-                        const maxTemp = document.createElement("p")
-                        const minTemp = document.createElement("p")
-                        date.textContent = weather.daily.time[i]
-                        date.className = "date"
-                        image.src = WMOCodes[weather.daily.weather_code[i]].day.image
-                        weatherName.textContent = WMOCodes[weather.daily.weather_code[i]].day.description
-                        weatherName.className = "weather-name"
-                        maxTemp.innerHTML = "max<br>" + weather.daily.temperature_2m_max[i] + "°C"
-                        minTemp.innerHTML = "min<br>" + weather.daily.temperature_2m_min[i] + "°C"
-                        article.append(date)
-                        article.append(image)
-                        article.append(weatherName)
-                        article.append(maxTemp)
-                        article.append(minTemp)
-                        document.body.children[1].children[1].append(article)
-                        console.log(WMOCodes[weather.daily.weather_code[i]].day.image)
-                        
-                    }
-                }))
-        })
+	event.preventDefault()
+	document.body.children[1].children[1].innerHTML = ""
+	displayCityName()
+	startWeatherApp()
 })
