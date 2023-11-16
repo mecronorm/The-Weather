@@ -325,7 +325,7 @@ async function startWeatherApp(){
 			const hourlyWeatherCode = document.createElement("img")
 			const hour = document.createElement("h5")
 			hourlyRain.innerHTML = "rain: "+weather.hourly.rain[arrayList] + weather.hourly_units.rain
-			hourlyTemp.innerHTML = weather.hourly.temperature_2m[arrayList]+ weather.hourly_units.temperature_2m
+			hourlyTemp.innerHTML = weather.hourly.temperature_2m[arrayList] + weather.hourly_units.temperature_2m
 			if (j > 5 || j < 18 ) {
 				hourlyWeatherCode.src = WMOCodes[weather.hourly.weather_code[arrayList]].day.image
 			} else {
@@ -372,7 +372,7 @@ async function displayCityName(){
 	const userInput = document.getElementById("user-city").value
 	const geo = await getGeoData(userInput)
 	const cityName = document.createElement("h2")
-    cityName.textContent = geo.name
+    cityName.textContent = geo.name + ", " + geo.country
     document.body.children[1].children[1].append(cityName)
 }
 
