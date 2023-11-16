@@ -304,8 +304,14 @@ async function startWeatherApp(){
 	const userInput = document.getElementById("user-city").value
 	const geo = await getGeoData(userInput)
 	const weather = await getWeatherData(geo.longitude, geo.latitude)
+	
 	let arrayList = 0
+	const mainDiv = document.createElement("div")
+	mainDiv.id = "main_div"
+	
 	for (let i = 0; i <= 6; i++) {
+		const selectedDiv = document.createElement("div")
+		const escapeButton = document.createElement("button")
 		const article = document.createElement("article")
 		const date = document.createElement("h4")
 		const image = document.createElement("img")
@@ -313,14 +319,32 @@ async function startWeatherApp(){
 		const maxTemp = document.createElement("p")
 		const minTemp = document.createElement("p")
 		for (let j = 0; j <= 23 ; j++) {
-			arrayList =+ j
+			const hourArticle = document.createElement("article")
+			const hourlyRain = document.createElement("p")
+			const hourlyTemp = document.createElement("p")
+			const hourlyWeatherCode = document.createElement("img")
+			const hour = document.createElement("h5")
+			hourlyRain.innerHTML = "rain: "+weather.hourly.rain[arrayList] + weather.hourly_units.rain
+			hourlyTemp.innerHTML = weather.hourly.temperature_2m[arrayList]+ weather.hourly_units.temperature_2m
+			if (j > 5 || j < 18 ) {
+				hourlyWeatherCode.src = WMOCodes[weather.hourly.weather_code[arrayList]].day.image
+			} else {
+				hourlyWeatherCode.src = WMOCodes[weather.hourly.weather_code[arrayList]].night.image
+			}
+			hour.textContent = j+ ":00"
+			hourArticle.append(hour, hourlyWeatherCode,hourlyTemp,hourlyRain)
+			selectedDiv.append(hourArticle)
+			arrayList++ 
 		}
 		if (i===0) {
 			date.textContent = "Today"
+			selectedDiv.className = "selected_div Today"
 		}else{
 			const day = new Date(weather.daily.time[i])
 			date.textContent = daysOfTheWeek[day.getDay()]
+			selectedDiv.className = "selected_div "+daysOfTheWeek[day.getDay()]
 		}
+		escapeButton.textContent = "X"
 		date.className = "date"
 		image.src = WMOCodes[weather.daily.weather_code[i]].day.image
 		weatherName.textContent = WMOCodes[weather.daily.weather_code[i]].day.description
@@ -329,9 +353,19 @@ async function startWeatherApp(){
 		maxTemp.innerHTML = "max<br>" + weather.daily.temperature_2m_max[i] + "°C"
 		minTemp.innerHTML = "min<br>" + weather.daily.temperature_2m_min[i] + "°C"
 		article.append(date, image, weatherName, maxTemp, minTemp)
-		document.body.children[1].children[1].append(article)
+		article.addEventListener("click", (event) =>{
+			mainDiv.style.display = "none"
+			selectedDiv.style.display = "flex"
+		})
+		escapeButton.addEventListener("click", (event) =>{
+			mainDiv.style.display = "flex"
+			selectedDiv.style.display = "none"
+		})
+		selectedDiv.append(escapeButton)
+		mainDiv.append(article)
+		document.body.children[1].children[1].append(selectedDiv)
 	}
-
+	document.body.children[1].children[1].append(mainDiv)
 }
 
 async function displayCityName(){
@@ -347,9 +381,15 @@ async function tempNow(){
 	const geo = await getGeoData(userInput)
 	const weather = await getWeatherData(geo.longitude, geo.latitude)
 
+	const currentTempCard = document.createElement("div")
+	const currentTempWeatherData = document.createElement("img")
 	const currentTemp = document.createElement("section")
+	currentTempWeatherData.src = WMOCodes[weather.current.weather_code].day.image
 	currentTemp.innerHTML = "<p>Current temperature in "+geo.name+":</p><h3>"+weather.current.temperature_2m + weather.current_units.temperature_2m+"</h3>"
-	document.body.children[1].children[1].append(currentTemp)
+	currentTempCard.id = "current_temp_card"
+	currentTempCard.append(currentTempWeatherData)
+	currentTempCard.append(currentTemp)
+	document.body.children[1].children[1].append(currentTempCard)
 }
 
 const userCityInput = document.getElementById("user-city-input")
