@@ -293,7 +293,7 @@ async function getGeoData(inputData){
 }
 
 async function getWeatherData(longitude, latitude){
-	const response = await fetch("https://api.open-meteo.com/v1/forecast?latitude="+latitude+"&longitude="+longitude+"&current=temperature_2m&hourly=temperature_2m,rain&daily=weather_code,temperature_2m_max,temperature_2m_min,rain_sum")
+	const response = await fetch("https://api.open-meteo.com/v1/forecast?latitude="+latitude+"&longitude="+longitude+"&current=temperature_2m,weather_code&hourly=temperature_2m,rain,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,rain_sum")
 	const weatherData = await response.json()
 	console.log(weatherData);
 
@@ -348,7 +348,7 @@ async function tempNow(){
 	const weather = await getWeatherData(geo.longitude, geo.latitude)
 
 	const currentTemp = document.createElement("section")
-	currentTemp.innerHTML = "<p>Current temperature in "+geo.name+":</p><br><h3>"+weather.current.temperature_2m + weather.current_units.temperature_2m+"</h3>"
+	currentTemp.innerHTML = "<p>Current temperature in "+geo.name+":</p><h3>"+weather.current.temperature_2m + weather.current_units.temperature_2m+"</h3>"
 	document.body.children[1].children[1].append(currentTemp)
 }
 
