@@ -283,6 +283,7 @@ const WMOCodes = {
 }
 
 const daysOfTheWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+const userCityInput = document.getElementById("user-city-input")
 
 async function getGeoData(inputData){
 	const response = await fetch("https://geocoding-api.open-meteo.com/v1/search?name="+inputData+"&count=10&language=en&format=json")
@@ -302,9 +303,13 @@ async function getWeatherData(longitude, latitude){
 
 async function startWeatherApp(){
 	const userInput = document.getElementById("user-city").value
-	const geo = await getGeoData(userInput)
-	const weather = await getWeatherData(geo.longitude, geo.latitude)
+	const geoData = await getGeoData(userInput)
+	const weatherData = await getWeatherData(geoData.longitude, geoData.latitude)
 	
+	createCardElements(weatherData)
+}
+
+async function createCardElements(weather){
 	let arrayList = 0
 	const mainDiv = document.createElement("div")
 	mainDiv.id = "main_div"
@@ -391,12 +396,19 @@ async function tempNow(){
 	currentTempCard.append(currentTemp)
 	document.body.children[1].children[1].append(currentTempCard)
 }
+async function clearCity(){
+	const toBeCleared = document.body.children[1].children[1]
 
-const userCityInput = document.getElementById("user-city-input")
+	while (toBeCleared.lastChild) {
+		toBeCleared.removeChild(toBeCleared.lastChild)
+	}
+}
+
 
 userCityInput.addEventListener("submit", (event) => {
 	event.preventDefault()
-	document.body.children[1].children[1].innerHTML = ""
+	clearCity()
+	// document.body.children[1].children[1].innerHTML = ""
 	displayCityName()
 	tempNow()
 	startWeatherApp()
