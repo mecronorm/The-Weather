@@ -408,7 +408,6 @@ async function clearCity(){
 userCityInput.addEventListener("submit", (event) => {
 	event.preventDefault()
 	clearCity()
-	// document.body.children[1].children[1].innerHTML = ""
 	displayCityName()
 	tempNow()
 	startWeatherApp()
